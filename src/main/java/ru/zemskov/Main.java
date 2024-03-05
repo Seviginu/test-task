@@ -3,25 +3,38 @@ package ru.zemskov;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args)  {
-        String filename = args.length == 1 ? args[0] : "test1.txt";
+    public static void main(String[] args) {
+        long startTime = System.nanoTime();
 
-        try(FileInputStream fis = new FileInputStream(filename)) {
+        String filename = args.length == 1 ? args[0] : "lng.txt";
+
+        try (FileInputStream fis = new FileInputStream(filename)) {
             StringParser parser = new StringParser(fis);
-            String[] list = parser.parseNextLine();
-            Arrays.stream(list).forEach(System.out::print);
-            list = parser.parseNextLine();
-            Arrays.stream(list).sequential().forEach(System.out::print);
-        }
-        catch (FileNotFoundException e){
-            System.out.println("File doesn't exist");
-        }
-        catch (IOException e) {
-            System.out.println("File read error");
+            StringGrouper grouper = new StringGrouper();
+            while (parser.hasNextLine()) {
+                grouper.addLine(parser.parseNextLine());
+            }
+            var groups = grouper.group();
+            System.out.printf("Количество групп: %d\n", groups.size());
+            int groupCounter = 0;
+            for (var group : groups) {
+                if (group.size() <= 1) continue;
+                System.out.printf("ГРУППА %d\n", ++groupCounter);
+                for (var row : group) {
+                    for (var el : row) {
+                        System.out.print(el);
+                        System.out.print(";");
+                    }
+                    System.out.println();
+                }
+            }
+            System.out.printf("Время работы программы: %d ms\n", (System.nanoTime() - startTime) / 1000000);
+        } catch (FileNotFoundException e) {
+            System.out.println("Файл не найден");
+        } catch (IOException e) {
+            System.out.println("Ошибка чтения");
         }
     }
 }
