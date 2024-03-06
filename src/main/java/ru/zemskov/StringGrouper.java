@@ -1,6 +1,9 @@
 package ru.zemskov;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 public class StringGrouper extends Grouper<String> {
     private void init_dsu() {
@@ -19,13 +22,6 @@ public class StringGrouper extends Grouper<String> {
         }
     }
 
-    private void removeCopies(List<List<List<String>>> groupsList) {
-        groupsList.replaceAll(lists -> lists.stream().distinct().toList());
-    }
-
-    private void removeOneStringGroups(List<List<List<String>>> groupsList) {
-        groupsList.removeIf(lst -> lst.size() <= 1);
-    }
 
     @Override
     public List<List<List<String>>> group() {
@@ -39,9 +35,7 @@ public class StringGrouper extends Grouper<String> {
             int rowGroup = dsu.find_set(i);
             groupsList.get(rowGroup).add(rows.get(i));
         }
-        removeCopies(groupsList);
-        removeOneStringGroups(groupsList);
-        groupsList.sort(Comparator.comparingInt(List::size));
+
         Collections.reverse(groupsList);
         return groupsList;
     }
