@@ -1,26 +1,40 @@
 package ru.zemskov;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class StringParser {
-    private final Scanner scanner;
+    private final List<String> strings;
 
-    public StringParser(InputStream is) {
-        this.scanner = new Scanner(is);
+    public StringParser(List<String> strings) {
+        this.strings = strings;
     }
 
-    public boolean hasNextLine() {
-        return scanner.hasNextLine();
-    }
-
-    public String[] parseNextLine() throws IOException {
-        if (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            return line.split(";");
-        } else {
-            throw new IOException("End of file reached. Couldn't read next line");
+    private List<String> split(String string, char split) {
+        int ptr = 0;
+        List<String> list = new ArrayList<>(3);
+        StringBuilder builder = new StringBuilder();
+        while (ptr < string.length()) {
+            if (string.charAt(ptr) == split) {
+                list.add(builder.toString());
+                builder.setLength(0);
+            } else {
+                builder.append(string.charAt(ptr));
+            }
+            ptr++;
         }
+        list.add(builder.toString());
+        return list;
+    }
+
+    public Set<List<String>> parseFile() throws IOException {
+        Set<List<String>> parsedLines = new HashSet<>();
+        for (String a : strings) {
+            parsedLines.add(split(a, ';'));
+        }
+        return parsedLines;
     }
 }

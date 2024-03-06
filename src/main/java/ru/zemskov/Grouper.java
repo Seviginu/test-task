@@ -1,6 +1,7 @@
 package ru.zemskov;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -8,18 +9,21 @@ abstract class Grouper<T> {
 
     protected DSU dsu;
     protected List<HashMap<T, Integer>> columns = new ArrayList<>();
-    protected List<List<T>> rows = new ArrayList<>();
+    protected Collection<List<T>> rows = new ArrayList<>();
 
     private void resizeColumns(int size) {
         while (columns.size() != size)
             columns.add(new HashMap<>());
     }
 
-    public void addLine(T[] a) {
-        if (columns.size() < a.length)
-            resizeColumns(a.length);
-        rows.add(new ArrayList<>(List.of(a)));
+    public void addLines(Collection<List<T>> lines) {
+        rows = lines;
+        for (var row : lines) {
+            if (columns.size() < row.size())
+                resizeColumns(row.size());
+        }
     }
+
 
     abstract public List<List<List<T>>> group();
 
@@ -44,8 +48,13 @@ abstract class Grouper<T> {
         public void union_sets(int a, int b) {
             a = find_set(a);
             b = find_set(b);
-            if (a != b)
-                parent[b] = a;
+            if (a != b) {
+                if (b % 2 == 1)
+                    parent[b] = a;
+                else {
+                    parent[a] = b;
+                }
+            }
         }
     }
 }
