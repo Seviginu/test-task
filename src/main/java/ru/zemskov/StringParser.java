@@ -15,7 +15,7 @@ public class StringParser {
 
     private List<String> split(String string, char split) {
         int ptr = 0;
-        List<String> list = new ArrayList<>(3);
+        List<String> list = new ArrayList<>();
         StringBuilder builder = new StringBuilder();
         while (ptr < string.length()) {
             if (string.charAt(ptr) == split) {

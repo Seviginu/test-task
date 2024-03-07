@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 
 abstract class Grouper<T> {
-
     protected DSU dsu;
     protected List<HashMap<T, Integer>> columns = new ArrayList<>();
     protected Collection<List<T>> rows = new ArrayList<>();

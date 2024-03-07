@@ -26,7 +26,6 @@ public class StringGrouper extends Grouper<String> {
 
     @Override
     public List<List<List<String>>> group() {
-        System.out.println(rows.size());
         init_dsu();
 
         List<List<List<String>>> groupsList = new ArrayList<>(rows.size());

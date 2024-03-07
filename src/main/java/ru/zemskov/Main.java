@@ -12,10 +12,8 @@ import static ru.zemskov.Utils.*;
 
 public class Main {
     public static void stringGroup(String filename) {
-
         Set<List<String>> lines = null;
         try {
-
             List<String> content = Files.readAllLines(Path.of(filename));
             StringParser parser = new StringParser(content);
             lines = parser.parseFile();
@@ -36,7 +34,7 @@ public class Main {
         removeOneStringGroups(groups);
         Comparator<List<?>> listSizeComparator = Comparator.comparingInt(List::size);
         groups.sort(listSizeComparator.reversed());
-        printGroups(groups);
+        printGroups(groups, "parsed.txt");
     }
 
 
